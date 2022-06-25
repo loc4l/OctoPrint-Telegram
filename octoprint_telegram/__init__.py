@@ -1047,7 +1047,7 @@ class TelegramPlugin(
     ##########
 
     def get_settings_version(self):
-        return 5
+        return 6
         # Settings version numbers used in releases
         # < 1.3.0: no settings versioning
         # 1.3.0 : 1
@@ -1059,6 +1059,7 @@ class TelegramPlugin(
         # 1.4.2 : 3
         # 1.4.3 : 4
         # 1.5.1 : 5 (PauseForUser)
+        # 1.6.6 : 6
 
     def get_settings_defaults(self):
         return dict(
@@ -1986,7 +1987,7 @@ class TelegramPlugin(
                                         self._logger.debug(
                                             "multicam url :  " + str(snapshot_url)
                                         )
-                                        
+
                                         if not snapshot_url: # if snapshot url is not stored try to create it
                                             self._logger.debug(
                                                 "multicam profile:  " + str(li)
@@ -2498,6 +2499,18 @@ class TelegramPlugin(
                     {
                         "command": "dontshutup",
                         "description": "Makes the bot talk again (opposite of `/shutup`)",
+                    }
+                )
+                commands.append(
+                    {
+                        "command": "nozzlelighton",
+                        "description": "Turn on the nozzle light on Anycubic printers",
+                    }
+                )
+                commands.append(
+                    {
+                        "command": "nozzlelightoff",
+                        "description": "Turn off the nozzle light on Anycubic printers",
                     }
                 )
                 commands.append(

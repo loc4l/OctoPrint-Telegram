@@ -57,6 +57,8 @@ class TCMD:
             "/tune": {"cmd": self.cmdTune, "param": True},
             "/help": {"cmd": self.cmdHelp, "bind_none": True},
             "/gcode": {"cmd": self.cmdGCode, "param": True},
+            "/nozzlelighton": {"cmd": self.cmdNozzleLightOn},
+            "/nozzlelightoff": {"cmd": self.cmdNozzleLightOff},
         }
 
     ############################################################################################
@@ -2768,6 +2770,8 @@ class TCMD:
                 "/ctrl - Use self defined controls from Octoprint.\n"
                 "/tune - Set feed- and flowrate. Control temperatures.\n"
                 "/user - Get user info.\n"
+                "/nozzlelighton - Turn on the nozzle light.\n"
+                "/nozzlelightoff - Turn off the nozzle light.\n"
             )
             + switch_command
             + gettext("/help - Show this help message."),
@@ -4212,3 +4216,33 @@ class TCMD:
             else:
                 text = "less than a minute"
         return text % replacements
+
+    ############################################################################################
+    def cmdNozzleLightOn(self, chat_id, from_id, cmd, parameter, user = ""):
+        if not self.main._printer.is_operational():
+            with_image = self.main._settings.get_boolean(["image_not_connected"])
+            self.main.send_msg(
+                self.gEmo("warning")
+                + gettext(" Not connected to a printer. Use /con to connect."),
+                chatID=chat_id,
+                inline=False,
+                with_image=with_image,
+            )
+        else:
+            self.main.send_msg("Nozzle light on.", chatID=chat_id)
+            self.main._printer.commands("M355 S1")
+
+    ############################################################################################
+    def cmdNozzleLightOff(self, chat_id, from_id, cmd, parameter, user = ""):
+        if not self.main._printer.is_operational():
+            with_image = self.main._settings.get_boolean(["image_not_connected"])
+            self.main.send_msg(
+                self.gEmo("warning")
+                + gettext(" Not connected to a printer. Use /con to connect."),
+                chatID=chat_id,
+                inline=False,
+                with_image=with_image,
+            )
+        else:
+            self.main.send_msg("Nozzle light off.", chatID=chat_id)
+            self.main._printer.commands("M355 S0")
